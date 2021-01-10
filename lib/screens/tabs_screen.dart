@@ -18,6 +18,7 @@ class _TabsScreenState extends State<TabsScreen> {
 
   @override
   void initState() {
+    favMeals = widget.favoritedMeals;
     _pages = [
       {
         'page': CategoriesScreen(),

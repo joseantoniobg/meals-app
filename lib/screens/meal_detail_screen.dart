@@ -8,6 +8,10 @@ class MealDetailScreen extends StatelessWidget {
   final ScrollController _mainScrollControler = ScrollController();
   final ScrollController _ingredientsScrollControler = ScrollController();
   final ScrollController _stepsScrollControler = ScrollController();
+  final Function toggleFavorite;
+  final Function isMealFavorite;
+
+  MealDetailScreen(this.toggleFavorite, this.isMealFavorite);
 
   Widget buildSectionTitle(BuildContext context, String title) {
     return Container(
@@ -110,11 +114,12 @@ class MealDetailScreen extends StatelessWidget {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.delete),
-        onPressed: () {
+          child: Icon(isMealFavorite(id) ? Icons.star : Icons.star_border),
+          onPressed: () => toggleFavorite(id)
+          /*() {
           Navigator.of(context).pop(id);
-        },
-      ),
+        }*/
+          ),
     );
   }
 }
