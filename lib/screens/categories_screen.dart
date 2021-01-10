@@ -1,15 +1,21 @@
 import 'package:flutter/material.dart';
-import './dummy-data.dart';
-import './category_item.dart';
+import '../dummy-data.dart';
+import '../widgets/category_item.dart';
 
 class CategoriesScreen extends StatelessWidget {
+  final ScrollController _scrollController = ScrollController();
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return /*Scaffold(
       appBar: AppBar(
         title: const Text('DeliMeal!'),
       ),
-      body: GridView(
+      body:*/
+        Scrollbar(
+      isAlwaysShown: true,
+      controller: _scrollController,
+      child: GridView(
+        controller: _scrollController,
         padding: const EdgeInsets.all(20),
         children: DUMMY_CATEGORIES
             .map((e) => CategoryItem(e.id, e.title, e.color))
@@ -22,5 +28,6 @@ class CategoriesScreen extends StatelessWidget {
         ),
       ),
     );
+    //);
   }
 }
