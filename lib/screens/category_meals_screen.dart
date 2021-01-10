@@ -7,6 +7,10 @@ class CategoryMealsScreen extends StatefulWidget {
   static const routeName = '/category-meals';
   // final String categoryId;
   // final String categoryTitle;
+  final List<Meal> displayedMeals;
+
+  CategoryMealsScreen(this.displayedMeals);
+
   @override
   _CategoryMealsScreenState createState() => _CategoryMealsScreenState();
 }
@@ -14,10 +18,10 @@ class CategoryMealsScreen extends StatefulWidget {
 // CategoryMealsScreen(this.categoryId, this.categoryTitle);
 class _CategoryMealsScreenState extends State<CategoryMealsScreen> {
   String categoryTitle;
-  List<Meal> displayedMeals;
   bool _loadInitData = false;
   final ScrollController _scrollController = ScrollController();
   double padding = 0;
+  List<Meal> displayedMeals;
 
   @override
   void didChangeDependencies() {
@@ -25,7 +29,7 @@ class _CategoryMealsScreenState extends State<CategoryMealsScreen> {
       final routeArgs =
           ModalRoute.of(context).settings.arguments as Map<String, String>;
       categoryTitle = routeArgs['title'];
-      displayedMeals = DUMMY_MEALS.where((meal) {
+      displayedMeals = widget.displayedMeals.where((meal) {
         return meal.categories.contains(routeArgs['id']);
       }).toList();
       padding = displayedMeals.length >= 3 ? 5 : 0;
@@ -52,28 +56,35 @@ class _CategoryMealsScreenState extends State<CategoryMealsScreen> {
             right: displayedMeals.length >= 3 ? 10 : 0,
             top: padding,
             bottom: padding),
-        child: Scrollbar(
-          isAlwaysShown: true,
-          controller: _scrollController,
-          thickness: 10,
-          radius: Radius.circular(5),
-          child: ListView.builder(
-            controller: _scrollController,
-            itemBuilder: (ctx, index) {
-              return MealItem(
-                id: displayedMeals[index].id,
-                title: displayedMeals[index].title,
-                imageUrl: displayedMeals[index].imageUrl,
-                duration: displayedMeals[index].duration,
-                affordability: displayedMeals[index].affordability,
-                complexity: displayedMeals[index].complexity,
-                removeItem: _removeMeal,
-                rightPadding: displayedMeals.length < 3 ? 10 : 20,
-              );
-            },
-            itemCount: displayedMeals.length,
-          ),
-        ),
+        child: displayedMeals.length == 0
+            ? Center(
+                child: Text(
+                  'No receipts avalaible!',
+                  style: Theme.of(context).textTheme.headline6,
+                ),
+              )
+            : Scrollbar(
+                isAlwaysShown: true,
+                controller: _scrollController,
+                thickness: 10,
+                radius: Radius.circular(5),
+                child: ListView.builder(
+                  controller: _scrollController,
+                  itemBuilder: (ctx, index) {
+                    return MealItem(
+                      id: displayedMeals[index].id,
+                      title: displayedMeals[index].title,
+                      imageUrl: displayedMeals[index].imageUrl,
+                      duration: displayedMeals[index].duration,
+                      affordability: displayedMeals[index].affordability,
+                      complexity: displayedMeals[index].complexity,
+                      removeItem: _removeMeal,
+                      rightPadding: displayedMeals.length < 3 ? 10 : 20,
+                    );
+                  },
+                  itemCount: displayedMeals.length,
+                ),
+              ),
       ),
     );
   }
